@@ -262,7 +262,7 @@ def train_loop(
         total_loss.backward()
 
         # Hard Gradient Clipping
-        nn.utils.clip_grad_norm([param for name, param in model.named_parameters() if name not in ["embed.embed.weight"]], FLAGS.clipping_max_value)
+        nn.utils.clip_grad_norm_([param for name, param in model.named_parameters() if name not in ["embed.embed.weight"]], FLAGS.clipping_max_value)
 
         # Gradient descent step.
         trainer.optimizer_step()
@@ -277,7 +277,7 @@ def train_loop(
         A.add('total_time', total_time)
 
         if trainer.step % FLAGS.statistics_interval_steps == 0:
-            A.add('xent_cost', xent_loss.data[0])
+            A.add('xent_cost', xent_loss.item())
             stats(model, trainer, A, log_entry)
             should_log = True
             progress_bar.finish()
